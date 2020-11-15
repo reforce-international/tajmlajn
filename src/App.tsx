@@ -7,10 +7,16 @@ const DAY_WIDTH = 16;
 
 const createState = (start: string, end: string, accelerationDay: string) => {
   const startDate = DateTime.fromISO(start);
-  if (!startDate.isValid) return;
+  if (!startDate.isValid) {
+    console.error("invalid startDate " + start, startDate);
+    return;
+  }
 
   const endDate = DateTime.fromISO(end);
-  if (!endDate.isValid) return;
+  if (!endDate.isValid) {
+    console.error("invalid endDate " + start, endDate);
+    return;
+  }
 
   const duration = endDate.diff(startDate, "days");
 
@@ -26,9 +32,10 @@ const createState = (start: string, end: string, accelerationDay: string) => {
     throw new Error(`Could not find a "${accelerationDay}" in 'days' array`);
 
   const periods = Array.from(
-    { length: Math.ceil(duration.days / 7) },
+    { length: Math.floor(duration.days / 7) },
     (_, i) => ({
       index: i,
+      length: 7,
     })
   );
 
@@ -45,9 +52,16 @@ const DEFAULT_START = "2020-01-01";
 const DEFAULT_END = "2020-02-15";
 const DEFAULT_ACCELERATION_DAY = "Monday";
 
+interface ProlongedPeriods {
+  [date: number]: number;
+}
+
 function App() {
   const [baseState, setBaseState] = useState(
     createState(DEFAULT_START, DEFAULT_END, DEFAULT_ACCELERATION_DAY)
+  );
+  const [prolongedPeriods, setProlongedPeriods] = useState<ProlongedPeriods>(
+    {}
   );
   console.log(baseState);
 
@@ -61,9 +75,8 @@ function App() {
             accelerationDay: DEFAULT_ACCELERATION_DAY,
           }}
           onSubmit={({ start, end, accelerationDay }) => {
-            console.log("submit", { start, end, accelerationDay });
-
-            return setBaseState(() => createState(start, end, accelerationDay));
+            setBaseState(() => createState(start, end, accelerationDay));
+            setProlongedPeriods({});
           }}
         ></RangeForm>
       </header>
@@ -73,7 +86,7 @@ function App() {
             className={"timeline__unit day day--" + d.weekdayLong.toLowerCase()}
             style={{ width: DAY_WIDTH }}
             key={d.toMillis()}
-            title={d.toFormat("yyyy-MM-DD, EEEEE")}
+            title={d.toFormat("yyyy-MM-DD")}
           >
             {d.weekdayShort.slice(0, 1)}
           </div>
@@ -88,10 +101,32 @@ function App() {
         {baseState?.periods.map((d) => (
           <div
             className="timeline__unit period"
-            style={{ width: DAY_WIDTH * 7 }}
+            style={{
+              width: DAY_WIDTH * (prolongedPeriods[d.index] ?? d.length),
+            }}
             key={d.index}
           >
+            <button
+              onClick={() =>
+                setProlongedPeriods((s) => ({
+                  ...s,
+                  [d.index]: (s[d.index] ?? d.length) - 1,
+                }))
+              }
+            >
+              -
+            </button>
             {d.index}
+            <button
+              onClick={() =>
+                setProlongedPeriods((s) => ({
+                  ...s,
+                  [d.index]: (s[d.index] ?? d.length) + 1,
+                }))
+              }
+            >
+              +
+            </button>
           </div>
         ))}
       </div>

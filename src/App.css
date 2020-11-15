@@ -47,6 +47,27 @@
 
 .period {
   font-size: 10px;
+  position: relative;
+}
+
+.period button {
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  line-height: 8px;
+  position: absolute;
+  transform: scale(0);
+  transition: transform 200ms;
+}
+.period button:first-child {
+  left: 10px;
+}
+.period button:last-child {
+  right: 10px;
+}
+
+.period:hover button {
+  transform: scale(1);
 }
 
 .RangeForm {

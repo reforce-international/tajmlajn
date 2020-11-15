@@ -22,14 +22,19 @@ export const RangeForm = ({ onSubmit, defaultValues }: RangeFormProp) => {
         <label htmlFor="end">End Date: </label>
         <input type="text" id="end" name="end" ref={register} />
       </div>
-      <select name="accelerationDay" ref={register}>
-        {WEEK_DAYS.map((wd) => (
-          <option value={wd} key={wd}>
-            {wd}
-          </option>
-        ))}
-      </select>
-      <button type="submit">Save</button>
+      <div className="RangeForm__fields">
+        <label htmlFor="accelerationDay">Acc. day: </label>
+        <select id="accelerationDay" name="accelerationDay" ref={register}>
+          {WEEK_DAYS.map((wd) => (
+            <option value={wd} key={wd}>
+              {wd}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="RangeForm__fields">
+        <button type="submit">Save</button>
+      </div>
     </form>
   );
 };
