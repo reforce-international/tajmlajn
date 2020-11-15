@@ -1,7 +1,7 @@
 .App {
   min-height: 100vh;
   padding: 0 32px;
-  color: rgba(255,255,255, 0.8)
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .App-header {
@@ -13,17 +13,40 @@
   color: #61dafb;
 }
 
-
 .timeline {
   white-space: nowrap;
+  margin-bottom: 2px;
 }
-.day {
-  display:inline-block;
-  height: 16px;
-  border-left: 1px solid gray;
-  border-right: 1px solid gray;
-  font-size: 10px;
+
+.timeline__unit {
   text-align: center;
+  height: 16px;
+  line-height: 16px;
+  display: inline-block;
+  box-sizing: border-box;
+  border: 1px none gray;
+  border-left-style: solid;
+}
+
+.timeline__unit:last-child {
+  border-right-style: solid;
+}
+
+.day {
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.1);
+}
+
+.day--monday {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.day--sunday {
+  color: rgba(255, 100, 100, 0.8);
+}
+
+.period {
+  font-size: 10px;
 }
 
 .RangeForm {
@@ -31,5 +54,5 @@
 }
 
 .RangeForm__fields {
-  margin:16px;
+  margin: 16px;
 }

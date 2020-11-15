@@ -3,9 +3,9 @@ import "./App.css";
 import { DateTime } from "luxon";
 import { RangeForm } from "./components/RangeForm";
 
-const DAY_WIDTH = 24;
+const DAY_WIDTH = 16;
 
-const createState = (start: string, end: string) => {
+const createState = (start: string, end: string, accelerationDay: string) => {
   const startDate = DateTime.fromISO(start);
   if (!startDate.isValid) return;
 
@@ -14,21 +14,40 @@ const createState = (start: string, end: string) => {
 
   const duration = endDate.diff(startDate, "days");
 
+  const days = Array.from({ length: duration.days }, (_, i) =>
+    startDate.plus({ days: i })
+  );
+
+  const firstAccelerationDayOffset = days.findIndex(
+    (d) => d.weekdayLong === accelerationDay
+  );
+
+  if (firstAccelerationDayOffset == null)
+    throw new Error(`Could not find a "${accelerationDay}" in 'days' array`);
+
+  const periods = Array.from(
+    { length: Math.ceil(duration.days / 7) },
+    (_, i) => ({
+      index: i,
+    })
+  );
+
   return {
     startDate,
     endDate,
-    days: Array.from({ length: duration.days }, (_, i) =>
-      startDate.plus({ days: i })
-    ),
+    days,
+    periods,
+    firstAccelerationDayOffset,
   };
 };
 
-const defaultStart = "2020-01-01";
-const defaultEnd = "2020-02-15";
+const DEFAULT_START = "2020-01-01";
+const DEFAULT_END = "2020-02-15";
+const DEFAULT_ACCELERATION_DAY = "Monday";
 
 function App() {
   const [baseState, setBaseState] = useState(
-    createState(defaultStart, defaultEnd)
+    createState(DEFAULT_START, DEFAULT_END, DEFAULT_ACCELERATION_DAY)
   );
   console.log(baseState);
 
@@ -36,23 +55,43 @@ function App() {
     <div className="App">
       <header className="App-header">
         <RangeForm
-          defaultValues={{ start: defaultStart, end: defaultEnd }}
-          onSubmit={({ start, end }) => {
-            console.log("submit", { start, end });
+          defaultValues={{
+            start: DEFAULT_START,
+            end: DEFAULT_END,
+            accelerationDay: DEFAULT_ACCELERATION_DAY,
+          }}
+          onSubmit={({ start, end, accelerationDay }) => {
+            console.log("submit", { start, end, accelerationDay });
 
-            return setBaseState(() => createState(start, end));
+            return setBaseState(() => createState(start, end, accelerationDay));
           }}
         ></RangeForm>
       </header>
       <div className="timeline">
         {baseState?.days.map((d) => (
           <div
-            className="day"
+            className={"timeline__unit day day--" + d.weekdayLong.toLowerCase()}
             style={{ width: DAY_WIDTH }}
             key={d.toMillis()}
             title={d.toFormat("yyyy-MM-DD, EEEEE")}
           >
             {d.weekdayShort.slice(0, 1)}
+          </div>
+        ))}
+      </div>
+      <div
+        className="timeline"
+        style={{
+          paddingLeft: (baseState?.firstAccelerationDayOffset ?? 0) * DAY_WIDTH,
+        }}
+      >
+        {baseState?.periods.map((d) => (
+          <div
+            className="timeline__unit period"
+            style={{ width: DAY_WIDTH * 7 }}
+            key={d.index}
+          >
+            {d.index}
           </div>
         ))}
       </div>

@@ -1,7 +1,8 @@
+import { Info } from "luxon";
 import React from "react";
 import { useForm } from "react-hook-form";
 
-type DateRange = { start: string; end: string };
+type DateRange = { start: string; end: string; accelerationDay: string };
 
 interface RangeFormProp {
   defaultValues: DateRange;
@@ -21,7 +22,16 @@ export const RangeForm = ({ onSubmit, defaultValues }: RangeFormProp) => {
         <label htmlFor="end">End Date: </label>
         <input type="text" id="end" name="end" ref={register} />
       </div>
+      <select name="accelerationDay" ref={register}>
+        {WEEK_DAYS.map((wd) => (
+          <option value={wd} key={wd}>
+            {wd}
+          </option>
+        ))}
+      </select>
       <button type="submit">Save</button>
     </form>
   );
 };
+
+const WEEK_DAYS = Info.weekdays();
