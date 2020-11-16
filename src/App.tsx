@@ -106,22 +106,24 @@ function App() {
             }}
             key={d.index}
           >
-            <button
-              onClick={() =>
-                setProlongedPeriods((s) => ({
-                  ...s,
-                  [d.index]: (s[d.index] ?? d.length) - 1,
-                }))
-              }
-            >
-              -
-            </button>
+            {(prolongedPeriods[d.index] ?? d.length) > 1 && (
+              <button
+                onClick={() =>
+                  setProlongedPeriods((current) => ({
+                    ...current,
+                    [d.index]: (current[d.index] ?? d.length) - 1,
+                  }))
+                }
+              >
+                -
+              </button>
+            )}
             {d.index}
             <button
               onClick={() =>
-                setProlongedPeriods((s) => ({
-                  ...s,
-                  [d.index]: (s[d.index] ?? d.length) + 1,
+                setProlongedPeriods((current) => ({
+                  ...current,
+                  [d.index]: (current[d.index] ?? d.length) + 1,
                 }))
               }
             >
