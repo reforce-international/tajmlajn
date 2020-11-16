@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/tajmlajn/static/css/main.bb245228.chunk.css",
-    "main.js": "/tajmlajn/static/js/main.131cc9b6.chunk.js",
-    "main.js.map": "/tajmlajn/static/js/main.131cc9b6.chunk.js.map",
+    "main.js": "/tajmlajn/static/js/main.b4e5a715.chunk.js",
+    "main.js.map": "/tajmlajn/static/js/main.b4e5a715.chunk.js.map",
     "runtime-main.js": "/tajmlajn/static/js/runtime-main.5cd0233d.js",
     "runtime-main.js.map": "/tajmlajn/static/js/runtime-main.5cd0233d.js.map",
     "static/js/2.27bfc0f8.chunk.js": "/tajmlajn/static/js/2.27bfc0f8.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.5cd0233d.js",
     "static/js/2.27bfc0f8.chunk.js",
     "static/css/main.bb245228.chunk.css",
-    "static/js/main.131cc9b6.chunk.js"
+    "static/js/main.b4e5a715.chunk.js"
   ]
 }
